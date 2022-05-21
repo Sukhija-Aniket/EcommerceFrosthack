@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'core',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
