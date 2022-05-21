@@ -8,4 +8,7 @@ app_ame = 'core'
 
 urlpatterns = [
     path('', views.item_list, name="item-list"),
+    path('product-list', views.product_list, name="product-page"),
+    path('checkout-page', views.checkout, name="checkout-page"),
+
 ]

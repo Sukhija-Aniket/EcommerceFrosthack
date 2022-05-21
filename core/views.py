@@ -14,3 +14,7 @@ def item_list(request):
 def product_list(request):
     context = {}
     return render(request, "product-page.html", context)
+
+def checkout(request):
+    context ={}
+    return render(request,"checkout-page.html",context)
