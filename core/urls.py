@@ -1,11 +1,12 @@
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
 from . import views
-from django.urls import path, include
+from django.urls import path
 
 app_ame = 'core'
 
 urlpatterns = [
-    path('', views.item_list, name="item-list"),
+    path('', views.HomeView.as_view(), name="home"),
+    path('checkout/', views.checkout, name="checkout"),
+    path('product/<slug>/',views.ItemDetailView.as_view(),name='product'),
+    path('add-to-cart/<slug>',views.add_to_cart,name='add_to_cart'),
+    path('remove-from-cart/<slug>',views.remove_from_cart,name='remove_from_cart'),
 ]
