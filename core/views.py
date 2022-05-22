@@ -10,18 +10,11 @@ from .models import Item,OrderItem,Order,Address,Payment
 from django.views.generic import ListView,DetailView,View
 from django.utils import timezone
 from .forms import CheckoutForm
-from django.views.decorators.csrf import csrf_exempt
 import stripe
 
-stripe.api_key = settings.STRIPE_SECRET_KEY 
-
+# stripe.api_key = "sk_test_51L2HK7SEQlo5lteprHceSIhP1lQdGiz6cK4ZMwWO7FAFOJkyYuPnIgB0v3yvBKzCnWiIV8XXOn6TjkxKTGAJOXfY00tVx05ESh"
 # `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
-stripe.Charge.create(
-  amount=2000,
-  currency="usd",
-  source="tok_amex",
-  description="My First Test Charge (created for API docs at https://www.stripe.com/docs/api)",
-)
+
 
 # Create your views here.
 
@@ -36,6 +29,7 @@ def home(request):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         #form
+        
         form = CheckoutForm()
         context = {
             'form':form
@@ -52,12 +46,11 @@ class CheckoutView(View):
                     return redirect('/')
                 print("passing through here")
                 if form.is_valid():
+                    print("yes it is")
                     street_address = form.cleaned_data.get('street_address')
                     apartment_address = form.cleaned_data.get('apartment_address')
                     country = form.cleaned_data.get('country')
                     zip = form.cleaned_data.get('zip')
-                    # same_shippping_address = form.cleaned_data.get('same_shipping_address')
-                    # save_info = form.cleaned_data.get('save_info')
                     payment_option = form.cleaned_data.get('payment_option')
                     address = Address(
                         user = self.request.user,
@@ -67,8 +60,17 @@ class CheckoutView(View):
                         zip = zip,
                     )
                     address.save()
+                    order.address = address
+                    order.save()
 
-                    return redirect('core:checkout')
+                    if payment_option == 'S':
+                        return redirect("core:payment",payment_option='stripe')
+                    elif payment_option=='P':
+                        return redirect("core:payment",payment_option='stripe')
+                    else:
+                        messages.warning(self.request,"invalid payment option")
+                        return redirect("core:checkout")
+
                 messages.warning(self.request,"Failed checkout")
                 return redirect("core:checkout",)
             
@@ -79,7 +81,11 @@ class CheckoutView(View):
        
 class PaymentView(View):
     def get(self,*args,**kwargs):
-        return render(self.request,'payment.html')
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        context = {
+            'order':order
+        }
+        return render(self.request,'payment.html',context)
 
     def post(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user,ordered=False) 
@@ -87,16 +93,17 @@ class PaymentView(View):
         amount = int(order.get_total()*100) 
 
         try:
-            charge = stripe.Charge.create(
-                amount=amount,
-                currency="usd",
-                source=token,
-                description="My First Test Charge (created for API docs at https://www.stripe.com/docs/api)",
-            )
+            #  uncomment the below lines to use the stripe payment gateway.
+            # charge = stripe.Charge.create(
+            #     amount=amount,
+            #     currency="usd",
+            #     source=token,
+            #     description="My First Test Charge (created for API docs at https://www.stripe.com/docs/api)",
+            # )
 
             # writing the payment 
             payment = Payment()
-            payment.stripe_charge_id = charge['id']
+            payment.stripe_charge_id = "empty_id" #charge['id']
             payment.user = self.request.user
             amount = amount
             payment.save()

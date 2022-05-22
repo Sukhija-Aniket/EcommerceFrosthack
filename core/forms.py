@@ -5,14 +5,14 @@ from django_countries.widgets import CountrySelectWidget
 
 PAYMENT_CHOICES =   (
     ('S','Stripe'),
-    ('P','Paypal'),
+    ('P','Paypal')
 )
 
 class CheckoutForm(forms.Form):
     street_address = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder':'Street No.'
     }))
-    apartment_address = forms.CharField(required=False, widget=forms.TextInput(attrs={
+    apartment_address = forms.CharField(required=True, widget=forms.TextInput(attrs={
         'placeholder':'House No.'
     }))
     country = CountryField(blank_label='(select_country)').formfield(widget=CountrySelectWidget(
@@ -24,6 +24,6 @@ class CheckoutForm(forms.Form):
         'class':'form-control'
     }))
     same_shipping_address = forms.BooleanField(required=False)
-    save_info = forms.BooleanField( required=False)
+    save_info = forms.BooleanField(required=False)
     payment_option = forms.ChoiceField(widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
 
