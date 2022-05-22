@@ -77,9 +77,9 @@ grey-ligten-3
               <hr>
 
               <div class="custom-control custom-checkbox">
-                <input {% if form.same_billing_address.value %} checked {% endif %} type="checkbox" name = "same_billing_address" class="custom-control-input" id="same-address">
+                <input {% if form.same_shipping_address.value %} checked {% endif %} type="checkbox" name = "same_shipping_address" class="custom-control-input" id="same-address">
                 
-                <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+                <label class="custom-control-label" for="same-address">Shipping address is the same as my shipping address</label>
               </div>
               <div class="custom-control custom-checkbox">
                 <input {% if form.save_info.value %} checked {% endif %}  type="checkbox"  name = "save-info" class="custom-control-input" id="save-info">
@@ -92,21 +92,13 @@ grey-ligten-3
               <div class="d-block my-3">
                 {% for name,value in form.fields.payment_option.choices %}
                 <div class="custom-control custom-radio">
-                  <input id="{{value}}" name="payment_option" value="{{value}}"  type="radio" class="custom-control-input" required>
+                  <input id="{{value}}" name="payment_option" value="{{name}}"  type="radio" class="custom-control-input" required>
                   <!-- {{form.payment_option}} -->
                   <label class="custom-control-label" for="{{value}}">{{value}}</label>
                 </div>
                 {% endfor %}
-                <!-- <div class="custom-control custom-radio">
-                  <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                  <label class="custom-control-label" for="paypal">Paypal</label>
-                </div> -->
+               
               </div>
-
-              <!-- these lines are also not to be displayed here -->
-             
-              
-            
               <hr class="mb-4">
               <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
 
@@ -114,17 +106,6 @@ grey-ligten-3
 
           </div>
           <!--/.Card-->
-
-
-
-
-
-
-
-
-
-
-
 
           <!-- these line below are of no use to me -->
         </div>
