@@ -29,10 +29,11 @@ def home(request):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         #form
-        
+        order = Order.objects.get(user=self.request.user,ordered=False)
         form = CheckoutForm()
         context = {
-            'form':form
+            'form':form,
+            'order':order
         }
         return render(self.request, "checkout.html",context)
     
