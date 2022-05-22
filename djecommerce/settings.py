@@ -15,11 +15,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    'crispy_forms',
+    
     'core',
 ]
 
@@ -71,6 +73,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+
+# CRISPY FORMS
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 DATABASES = {
     "default": {

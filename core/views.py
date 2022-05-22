@@ -22,6 +22,7 @@ def checkout(request):
 
 class HomeView(ListView):
     model=Item
+    paginate_by: 10
     template_name = "home.html"
 
 
@@ -48,8 +49,9 @@ def add_to_cart(request,slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item.quantity += 1
             order_item.save()
+            messages.info(request,f"{order_item.quantity} {order_item.item.title} present in the cart now.")
         else:
-            messages.info(request,f"{order_item.quantity} {order_item.title} present in the cart now.")
+            messages.info(request,f"This item was added to your cart")
             order.items.add(order_item)
     else:
         ordered_date = timezone.now()
@@ -67,14 +69,25 @@ def remove_from_cart(request,slug):
         if order.items.filter(item__slug = item.slug).exists():
             order_item = order.items.filter(item__slug=item.slug)[0]
             messages.info(request,"This item was removed from your cart")
+            order_item.quantity = 1
+            order_item.save()
             order.items.remove(order_item)
             return redirect("core:product",slug=slug)
         else:
             # adding a message that the item does not exist.
-            messages.info(request,"Item does not exist in the cart")
+            messages.info(request,"No item exists in the cart")
             return redirect("core:product", slug=slug)
     else:
         messages.info(request,"No item exists in the cart")
         return redirect("core:product", slug=slug)
     
-    return redirect("core:product",slug=slug)
+
+# def cart_item_count(request):
+#     count = 0
+#     if(request.user.is_authenticated):
+#         order_qs = Order.objects.filter(user=request.user,ordered=False)
+#         if order_qs.exists():
+#             order = order_qs[0]
+#             count = order.items.count()
+#     return count
+
