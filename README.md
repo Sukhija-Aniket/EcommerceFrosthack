@@ -1,8 +1,8 @@
 # EcommerceFrosthack
-Building Ecommerce application for Frosthack IIT Mandi
+Building Ecommerce application, MandiMart for Frosthack'2022 IIT Mandi
 
 
-how to proceed:-
+How to proceed:-
 
 firstly fork the repository and then clone it into your local system.
 
