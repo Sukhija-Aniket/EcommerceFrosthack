@@ -104,7 +104,7 @@ class PaymentView(View):
 
             # writing the payment 
             payment = Payment()
-            payment.stripe_charge_id = "empty_id" #charge['id']
+            payment.stripe_charge_id = "empty_id" # charge['id']
             payment.user = self.request.user
             amount = amount
             payment.save()
@@ -133,13 +133,6 @@ class PaymentView(View):
         except Exception as e:
             messages.error(self.request,"hamari galti hai.")
             pass
-    
-       
-
-
-
-
-
 
 class HomeView(ListView):
     model = Item
